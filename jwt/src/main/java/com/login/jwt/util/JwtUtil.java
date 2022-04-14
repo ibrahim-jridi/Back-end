@@ -3,8 +3,12 @@ package com.login.jwt.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import com.login.jwt.service.UserDetailsImpl;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -19,7 +23,9 @@ public class JwtUtil {
     private static final int TOKEN_VALIDITY = 3600 * 5;
 
     public String getUsernameFromToken(String token) {
-        return getClaimFromToken(token, Claims::getSubject);
+        //return getClaimFromToken(token, Claims::getSubject);
+		return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().getSubject();
+
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
@@ -44,7 +50,15 @@ public class JwtUtil {
     public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
     }
-
+    public String generateJwtToken(Authentication authentication) {
+		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+		return Jwts.builder()
+				.setSubject((userPrincipal.getUsername()))
+				.setIssuedAt(new Date())
+				.setExpiration(new Date((new Date()).getTime() + TOKEN_VALIDITY))
+				.signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+				.compact();
+	}
     public String generateToken(UserDetails userDetails) {
 
         Map<String, Object> claims = new HashMap<>();
