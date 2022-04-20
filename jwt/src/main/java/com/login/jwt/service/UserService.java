@@ -87,6 +87,7 @@ public class UserService  {
 		  Role role =  roleDao.findById("User").get(); Set<Role> userRoles = new HashSet<>();
 		  			userRoles.add(role); user.setRole(userRoles);
 		  			user.setUserPassword(getEncodedPassword(user.getUserPassword()));
+		  			user.setUserConfirmPassword(getEncodedPassword(user.getUserConfirmPassword()));
 		  			Iterable<User> users = userDao.findAll();
 		  			for (User userExist : users) {
 		  				if (user.getUserName().equals(userExist.getUserName())) {
@@ -101,6 +102,7 @@ public class UserService  {
 			  roleDao.findById("Formatter").get(); Set<Role> userRoles = new HashSet<>();
 			  userRoles.add(role); formatter.setRole(userRoles);
 			  formatter.setUserPassword(getEncodedPassword(formatter.getUserPassword()));
+				formatter.setUserConfirmPassword(getEncodedPassword(formatter.getUserConfirmPassword()));
 			  Iterable<User> formatters = userDao.findAll();
 	  			for (User formatterExist : formatters) {
 	  				if (formatter.getUserName().equals(formatterExist.getUserName())) {

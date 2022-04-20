@@ -77,6 +77,7 @@ public class FormatterController {
 	@PostMapping({"/formatterss"}) public Formatter registerNewFormatter(@RequestBody
 			  Formatter formatter)  { 
 		formatter.setUserPassword(getEncodedPassword(formatter.getUserPassword()));
+		formatter.setUserConfirmPassword(getEncodedPassword(formatter.getUserConfirmPassword()));
 		List<Formatter> formatters = formatterDao.findAll();
 			for (Formatter formatterExist : formatters) {
 				if (formatter.getUserName().equals(formatterExist.getUserName())) {
@@ -128,6 +129,8 @@ public class FormatterController {
 		formatter.setImage(formatterDetails.getImage());
 		formatter.setAdresse(formatterDetails.getAdresse());
 		formatter.setSpecialite(formatterDetails.getSpecialite());
+		formatter.setUserPassword(getEncodedPassword(formatter.getUserPassword()));
+		formatter.setUserConfirmPassword(getEncodedPassword(formatter.getUserConfirmPassword()));
 		
 		Formatter updatedFormatter = formatterDao.save(formatter);
 		Formatter updateFormatter = userDao.save(formatter);
