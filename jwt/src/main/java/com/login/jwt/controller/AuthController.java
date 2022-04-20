@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.login.jwt.dao.RoleDao;
 import com.login.jwt.dao.UserDao;
+import com.login.jwt.entity.JwtRequest;
 import com.login.jwt.service.UserDetailsImpl;
 import com.login.jwt.util.JwtUtil;
 import com.login.jwt.controller.LoginRequest;
@@ -39,11 +40,13 @@ public class AuthController {
 	PasswordEncoder encoder;
 	@Autowired
 	JwtUtil jwtUtils;
+	
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
+		 
 		String jwt = jwtUtils.generateJwtToken(authentication);
 		
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();		

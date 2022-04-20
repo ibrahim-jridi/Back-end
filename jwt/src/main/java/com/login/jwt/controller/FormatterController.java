@@ -104,8 +104,8 @@ public class FormatterController {
 	 
 	//get formatter by username
 	@GetMapping("/findByUsername/{username}")
-	 public Formatter findByFormatterName(@PathVariable String formattername) {
-		   Optional<Formatter> formatters = formatterDao.findByUserName(formattername);
+	 public Formatter findByFormatterName(@PathVariable String username) {
+		   Optional<Formatter> formatters = formatterDao.findByUserName(username);
 		    if (formatters.isPresent()) {
 		     Formatter formatter = formatters.get();
 		   return formatter;

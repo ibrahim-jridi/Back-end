@@ -50,14 +50,8 @@ public class Formation {
 
 	private Set<Theme> theme = new HashSet<>(); 
 	
-	@ManyToMany(
-			fetch = FetchType.LAZY,
-				      cascade = {
-				              CascadeType.PERSIST,
-				              CascadeType.MERGE
-			    }
-		)
-	@JoinTable(name = "formation_formatter",
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "formations_formatter",
     joinColumns = {
             @JoinColumn(name = "FORMATION_ID")
     },
@@ -66,7 +60,7 @@ public class Formation {
             }
 	)
 
-	private Set<Formatter> formatter = new HashSet<>(); ;
+	private Set<Formatter> formatter = new HashSet<>(); 
 	private String lien;
 	
 	

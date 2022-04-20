@@ -75,6 +75,7 @@ public class JwtService implements UserDetailsService {
         	SecurityContextHolder.getContext().setAuthentication(authentication);
         	UserDetails userDetails =
         			(UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        	
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {

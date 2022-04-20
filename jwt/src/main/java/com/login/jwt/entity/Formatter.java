@@ -48,29 +48,27 @@ public class Formatter {
     )
     private Set<Role> role;
 	
-	@ManyToMany(fetch = FetchType.LAZY,
-		      cascade = {
-		          CascadeType.PERSIST,
-		          CascadeType.MERGE
-		      },
-		      mappedBy = "formatter")
-		  @JsonIgnore
-		  private Set<Formation> formation = new HashSet<>();
 	
-	public Formatter() {
-		
-	}
+	  
 	
-	public Formatter(String userName, String userFirstName, String userLastName, String email,String phone, String userPassword,String userConfirmPassword) {
-		super();
-		this.userName = userName;
-		this.userPassword = userPassword;
-		this.userConfirmPassword = userConfirmPassword;
-		this.userFirstName = userFirstName;
-		this.userLastName = userLastName;
-		this.email = email;
-		this.phone = phone;
-	}
+	  @ManyToMany(cascade=CascadeType.ALL, mappedBy="formatter")
+	  
+	  @JsonIgnore private Set<Formation> formation = new HashSet<>();
+	 
+	 
+	
+	
+	  public Formatter() {
+	  
+	  }
+	  
+	  public Formatter(String userName, String userFirstName, String userLastName,
+	  String email,String phone, String userPassword,String userConfirmPassword) {
+	  super(); this.userName = userName; this.userPassword = userPassword;
+	  this.userConfirmPassword = userConfirmPassword; this.userFirstName =
+	  userFirstName; this.userLastName = userLastName; this.email = email;
+	  this.phone = phone; }
+	 
 
 	public long getId() {
 		return id;
@@ -173,13 +171,12 @@ public class Formatter {
 		this.role = role;
 	}
 
-	public Set<Formation> getFormation() {
-		return formation;
-	}
-
-	public void setFormation(Set<Formation> formation) {
-		this.formation = formation;
-	}
+	/*
+	 * public Set<Formation> getFormation() { return formation; }
+	 * 
+	 * public void setFormation(Set<Formation> formation) { this.formation =
+	 * formation; }
+	 */
 	
 
 }

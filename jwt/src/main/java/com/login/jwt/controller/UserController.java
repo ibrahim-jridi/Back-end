@@ -3,6 +3,8 @@ package com.login.jwt.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +28,8 @@ public class UserController {
     private UserService userService;
     @Autowired
 	  private FormatterDao formatterDao;
+    @Autowired
+	  private FormatterController formattercontroller;
 
     @PostConstruct
     public void initRoleAndUser() {
@@ -46,10 +50,14 @@ public class UserController {
         return "This URL is only accessible to the admin";
     }
     
-    @GetMapping({"/forFormatter"})
+    @GetMapping({"/forFormatter/{username}"})
     @PreAuthorize("hasRole('Formatter')")
-    public   String forFormatter(){
-        return "This URL is only accessible to the formatter";
+    public   Formatter forFormatter(@PathVariable String username){
+    	Formatter formatter = formattercontroller.findByFormatterName(username);
+    	UserDetails userDetails =
+    			(UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	return formatter ;
+        //return "This URL is only accessible to the formatter";
 		/*
 		 * Formatter formatter = FormatterDao.findById(id) .orElseThrow(() -> new
 		 * ResourceNotFoundException("formatteur n'est pas trouvé avec ce id :" + id));
