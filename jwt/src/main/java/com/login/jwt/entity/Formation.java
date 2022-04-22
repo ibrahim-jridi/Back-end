@@ -32,19 +32,14 @@ public class Formation {
 	private long id;
 	private String name;
 	private String description;
-	@ManyToMany(
-			fetch = FetchType.LAZY,
-				      cascade = {
-				              CascadeType.PERSIST,
-				              CascadeType.MERGE
-			    }
-		)
-	@JoinTable(name = "formation_theme",
+
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "formations_theme",
     joinColumns = {
             @JoinColumn(name = "FORMATION_ID")
     },
     inverseJoinColumns = {
-            @JoinColumn(name = "THEME_ID")
+            @JoinColumn(name = "Theme_ID")
             }
 	)
 

@@ -20,19 +20,12 @@ public class Theme {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	
 	private String name;
 
-	
 	private String description;
-	@ManyToMany(fetch = FetchType.LAZY,
-		      cascade = {
-		          CascadeType.PERSIST,
-		          CascadeType.MERGE
-		      },
-		      mappedBy = "theme")
-		  @JsonIgnore
-		  private Set<Formation> formation = new HashSet<>();
+	
+	@ManyToMany(cascade=CascadeType.ALL, mappedBy="theme")
+	  @JsonIgnore private Set<Formation> formation = new HashSet<>();
 	
 	
 	
