@@ -61,6 +61,15 @@ public class Formation {
 	)
 
 	private Set<Formatter> formatter = new HashSet<>(); 
+	//return formatter name
+	public String name() {
+		return ((Formatter) this.getFormatter()).getUserName();
+		//((Formatter) formatter).getUserName()
+	}
+	//return formatter email
+	public String email() {
+		return ((Formatter) this.getFormatter()).getEmail();
+	}
 	private String lien;
 	
 	

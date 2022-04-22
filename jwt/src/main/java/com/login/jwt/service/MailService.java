@@ -16,11 +16,7 @@ import com.login.jwt.entity.User;
 
 
 
-/**
- * 
- * @author Mukuljaiswal
- *
- */
+
 @Service
 public class MailService {
 
@@ -46,7 +42,7 @@ public class MailService {
 	 * @throws MailException
 	 */
 
-	public void sendEmail(User user) throws MailException {
+	public void sendEmail(String user) throws MailException {
 
 		/*
 		 * This JavaMailSender Interface is used to send Mail in Spring Boot. This
@@ -56,9 +52,9 @@ public class MailService {
 		 */
 
 		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo(user.getEmail());
-		mail.setSubject("Testing Mail API");
-		mail.setText("Hurray ! You have done that dude...");
+		mail.setTo(user);
+		mail.setSubject("Affecter à une formation");
+		mail.setText("Vous avez été affecté comme un formateur d'une formation");
 
 		/*
 		 * This send() contains an Object of SimpleMailMessage as an Parameter
@@ -80,8 +76,8 @@ public class MailService {
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
 		helper.setTo(user.getEmail());
-		helper.setSubject("Testing Mail API with Attachment");
-		helper.setText("Please find the attached document below.");
+		helper.setSubject("Affecter à une formation");
+		helper.setText("Vous avez été affecté comme un formateur d'une formation");
 
 		ClassPathResource classPathResource = new ClassPathResource("Attachment.pdf");
 		helper.addAttachment(classPathResource.getFilename(), classPathResource);

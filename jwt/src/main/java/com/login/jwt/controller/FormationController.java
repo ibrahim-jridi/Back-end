@@ -26,7 +26,9 @@ import com.login.jwt.entity.Formation;
 import com.login.jwt.entity.Formatter;
 import com.login.jwt.entity.Role;
 import com.login.jwt.entity.Theme;
+import com.login.jwt.entity.User;
 import com.login.jwt.util.ResourceNotFoundException;
+import com.login.jwt.service.MailService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -39,6 +41,12 @@ public class FormationController {
 	  private FormationDao formationDao;
 	 @Autowired
 	  private ThemeDao themeDao;
+	 @Autowired
+	  private FormatterController  formattercontroller;
+	 @Autowired
+	  private MailService  mailService;
+	 
+	 public boolean isSaved = false ;
 	
 	// get all formation
 		@GetMapping("/formations")
@@ -53,11 +61,21 @@ public class FormationController {
 			 * Theme theme = themeDao.findByName("name").get(); Set<Theme> fthemes = new
 			 * HashSet<>(); fthemes.add(theme); formation.setTheme(fthemes);
 			 */
-					return formationDao.save(formation);
+			//String formatterName = formation.name();
+			String formatterEmail = formation.email();
+			isSaved = true;
+			if (isSaved == true) {
+				
+					mailService.sendEmail(formatterEmail);
+				
+			}
+			return formationDao.save(formation);
+					 
+					
 			}
 		// get formation by id rest api
 		@GetMapping("/formations/{id}")
-		@ApiOperation("Returns Uer based in user id .")
+		@ApiOperation("Returns User based in user id .")
 		public ResponseEntity<Formation> getFormationById(@PathVariable Long id) {
 			Formation formation = formationDao.findById(id)
 					.orElseThrow(() -> new ResourceNotFoundException("formation n'est pas trouvé :" + id));
