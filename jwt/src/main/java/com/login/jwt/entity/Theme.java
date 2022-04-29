@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,7 +25,7 @@ public class Theme {
 
 	private String description;
 	
-	@ManyToMany(cascade=CascadeType.ALL, mappedBy="theme")
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="theme")
 	  @JsonIgnore private Set<Formation> formation = new HashSet<>();
 	
 	

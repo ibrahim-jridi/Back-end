@@ -32,39 +32,17 @@ public class Formation {
 	private long id;
 	private String name;
 	private String description;
-
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "formations_theme",
-    joinColumns = {
-            @JoinColumn(name = "FORMATION_ID")
-    },
-    inverseJoinColumns = {
-            @JoinColumn(name = "Theme_ID")
-            }
-	)
-
-	private Set<Theme> theme = new HashSet<>(); 
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "formations_formatter",
-    joinColumns = {
-            @JoinColumn(name = "FORMATION_ID")
-    },
-    inverseJoinColumns = {
-            @JoinColumn(name = "Formatter_ID")
-            }
-	)
-
-	private Set<Formatter> formatter = new HashSet<>(); 
-	//return formatter name
-	public String name() {
-		return ((Formatter) this.getFormatter()).getUserName();
-		//((Formatter) formatter).getUserName()
-	}
-	//return formatter email
-	public String email() {
-		return ((Formatter) this.getFormatter()).getEmail();
-	}
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="idTheme")
+	private Theme theme;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="idFormatter")
+	private Formatter formatter;
+	
+	
+	
 	private String lien;
 	
 	
@@ -98,26 +76,18 @@ public class Formation {
 		this.description = description;
 	}
 
-	
-	
-
-	public Set<Theme> getTheme() {
+	public Theme getTheme() {
 		return theme;
 	}
-
-	public void setTheme(Set<Theme> theme) {
+	public void setTheme(Theme theme) {
 		this.theme = theme;
 	}
-	
-	
-	public Set<Formatter> getFormatter() {
+	public Formatter getFormatter() {
 		return formatter;
 	}
-
-	public void setFormatter(Set<Formatter> formatter) {
+	public void setFormatter(Formatter formatter) {
 		this.formatter = formatter;
 	}
-
 	public String getLien() {
 		return lien;
 	}

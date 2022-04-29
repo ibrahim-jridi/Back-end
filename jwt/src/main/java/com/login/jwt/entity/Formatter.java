@@ -29,8 +29,9 @@ public class Formatter {
 	
 	private String email;
 	private String phone;
-	@OneToOne(mappedBy = "formatter")
-    private Image image;
+	/*
+	 * @OneToOne(mappedBy = "formatter") private ImageModel imageModel;
+	 */
 	private String adresse;
 	private String specialite;
 	
@@ -51,7 +52,7 @@ public class Formatter {
 	
 	  
 	
-	  @ManyToMany(cascade=CascadeType.ALL, mappedBy="formatter")
+	  @OneToMany(cascade=CascadeType.ALL, mappedBy="formatter")
 	  
 	  @JsonIgnore private Set<Formation> formation = new HashSet<>();
 	 
@@ -121,12 +122,14 @@ public class Formatter {
 	
 	
 
-	public Image getImage() {
-		return image;
+	
+
+	public Set<Formation> getFormation() {
+		return formation;
 	}
 
-	public void setImage(Image image) {
-		this.image = image;
+	public void setFormation(Set<Formation> formation) {
+		this.formation = formation;
 	}
 
 	public String getAdresse() {

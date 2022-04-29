@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.login.jwt.dao.FormatterDao;
+import com.login.jwt.dao.UserDao;
 import com.login.jwt.entity.Formatter;
 import com.login.jwt.entity.User;
 import com.login.jwt.service.UserService;
 import com.login.jwt.util.ResourceNotFoundException;
+
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
@@ -29,7 +32,11 @@ public class UserController {
     @Autowired
 	  private FormatterDao formatterDao;
     @Autowired
+	  private UserDao userDao;
+    @Autowired
 	  private FormatterController formattercontroller;
+    @Autowired
+	  private UserController usercontroller;
 
     @PostConstruct
     public void initRoleAndUser() {
@@ -42,12 +49,27 @@ public class UserController {
 	  
 	  @PostMapping({"/registerNewFormatter"}) public User registerNewFormatter(@RequestBody
 			  User formatter) { return userService.registerNewFormatter(formatter); }
+	  
+	//get user by username
+		@GetMapping("/findByUsername/{username}")
+		 public User findByUserName(@PathVariable String username) {
+			   Optional<User> users = userDao.findByUserName(username);
+			    if (users.isPresent()) {
+			     User user = users.get();
+			   return user;
+			  }
+			   return null;
+			 }
 	 
 
-    @GetMapping({"/forAdmin"})
+    @GetMapping({"/forAdmin/{username}"})
     @PreAuthorize("hasRole('Admin')")
-    public String forAdmin(){
-        return "This URL is only accessible to the admin";
+    public User forAdmin(@PathVariable String username){
+    	User user = usercontroller.findByUserName(username);
+    	UserDetails userDetails =
+    			(UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	return user ;
+       // return "This URL is only accessible to the admin";
     }
     
     @GetMapping({"/forFormatter/{username}"})

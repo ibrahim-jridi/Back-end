@@ -126,7 +126,7 @@ public class FormatterController {
 		formatter.setUserFirstName(formatterDetails.getUserFirstName());
 		formatter.setUserLastName(formatterDetails.getUserLastName());
 		formatter.setEmail(formatterDetails.getEmail());
-		formatter.setImage(formatterDetails.getImage());
+		//formatter.setImage(formatterDetails.getImage());
 		formatter.setAdresse(formatterDetails.getAdresse());
 		formatter.setSpecialite(formatterDetails.getSpecialite());
 		formatter.setUserPassword(getEncodedPassword(formatter.getUserPassword()));
