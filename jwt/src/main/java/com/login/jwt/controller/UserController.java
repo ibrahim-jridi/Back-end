@@ -5,9 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +39,12 @@ public class UserController {
 	  private FormatterController formattercontroller;
     @Autowired
 	  private UserController usercontroller;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+	
+	public String getEncodedPassword(String password) {
+        return passwordEncoder.encode(password);
+    }
 
     @PostConstruct
     public void initRoleAndUser() {
@@ -60,7 +68,29 @@ public class UserController {
 			  }
 			   return null;
 			 }
-	 
+		// update formatter rest api
+		
+		@PutMapping("/user/{id}")
+		public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User userDetails){
+			User user = userDao.findByUserName(id)
+					.orElseThrow(() -> new ResourceNotFoundException("user n'est pas trouvé avec ce id :" + id));
+			
+			user.setUserName(userDetails.getUserName());
+			
+			user.setUserFirstName(userDetails.getUserFirstName());
+			user.setUserLastName(userDetails.getUserLastName());
+			user.setEmail(userDetails.getEmail());
+			//formatter.setImage(formatterDetails.getImage());
+			user.setAdresse(userDetails.getAdresse());
+			user.setSpecialite(userDetails.getSpecialite());
+			user.setUserPassword(getEncodedPassword(user.getUserPassword()));
+			user.setUserConfirmPassword(getEncodedPassword(user.getUserConfirmPassword()));
+			
+			User updatedUser = userDao.save(user);
+			User updateUser = userDao.save(user);
+			return ResponseEntity.ok(updatedUser);
+			
+		}
 
     @GetMapping({"/forAdmin/{username}"})
     @PreAuthorize("hasRole('Admin')")

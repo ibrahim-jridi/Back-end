@@ -58,33 +58,29 @@ public class FormationController {
 		// create formation rest api
 		@PostMapping("/formations/{idFormatter}/{idTheme}")
 		
-		public Formation createFormation(@RequestBody Formation formation ,@PathVariable Long idFormatter,@PathVariable Long idTheme  ) {
+		public Formation createFormation(@RequestBody Formation formation,@RequestBody Formation formationDetails  ) {
 			/*
 			 * Theme theme = themeDao.findByName("name").get(); Set<Theme> fthemes = new
 			 * HashSet<>(); fthemes.add(theme); formation.setTheme(fthemes);
 			 */
 			//String formatterName = formation.name();
-			
-			/*
-			 * String formatterEmail = formation.email(); isSaved = true; if (isSaved ==
-			 * true) {
-			 * 
-			 * mailService.sendEmail(formatterEmail);
-			 * 
-			 * }
+			/* String formatterEmail = formation.email(); isSaved = true; if (isSaved == true) {
+			 *  mailService.sendEmail(formatterEmail); }
 			 */
-			Formatter formatter = formatterDao.findById(idFormatter).get();
-			Theme theme = themeDao.findById(idTheme).get();
-			if (theme == null || formatter == null) {
-				return null;
-			} else {
-				formation.setFormatter( formatter);
+			//Formatter formatter = formatterDao.findById(idFormatter).get();
+			//Theme theme = themeDao.findById(idTheme).get();
+			//if (theme == null || formatter == null) {
+				//return null;
+			//} else {
+			Formatter formatter= new Formatter() ;
+			Theme theme =new Theme();
+				formation.setFormatter( formationDetails.getFormatter());
 				formatter.getFormation().add(formation);
 				formatterDao.save(formatter);
 				String email = formatter.getEmail();
 				mailService.sendEmail(email);
 				
-				formation.setTheme( theme);
+				formation.setTheme( formationDetails.getTheme());
 				theme.getFormation().add(formation);
 				themeDao.save(theme);
 				return formationDao.save(formation);
@@ -93,15 +89,16 @@ public class FormationController {
 			
 					 
 					
-			}
+			//}
 		// get formation by id rest api
 		@GetMapping("/formations/{id}")
-		@ApiOperation("Returns Formation based in user id .")
+		@ApiOperation("Returns Formation based on id .")
 		public ResponseEntity<Formation> getFormationById(@PathVariable Long id) {
 			Formation formation = formationDao.findById(id)
 					.orElseThrow(() -> new ResourceNotFoundException("formation n'est pas trouvé :" + id));
 			return ResponseEntity.ok(formation);
 		}
+		
 		
 		//update formation
 		@PutMapping("/formations/{id}")

@@ -26,7 +26,8 @@ public class Theme {
 	private String description;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="theme")
-	  @JsonIgnore private Set<Formation> formation = new HashSet<>();
+	  @JsonIgnore
+	  private Set<Formation> formation = new HashSet<>();
 	
 	
 	

@@ -34,7 +34,7 @@ public class Formatter {
 	 */
 	private String adresse;
 	private String specialite;
-	
+	private String fileName;
 	private String userPassword;
     private String userConfirmPassword;
 
@@ -54,21 +54,32 @@ public class Formatter {
 	
 	  @OneToMany(cascade=CascadeType.ALL, mappedBy="formatter")
 	  
-	  @JsonIgnore private Set<Formation> formation = new HashSet<>();
+	  @JsonIgnore 
+	  private Set<Formation> formation = new HashSet<>();
 	 
 	 
 	
 	
 	  public Formatter() {
-	  
+		  super();
 	  }
+	  @Override
+		public String toString() {
+			return "Article [ fileName=" + fileName + "]";
+		}
 	  
 	  public Formatter(String userName, String userFirstName, String userLastName,
-	  String email,String phone, String userPassword,String userConfirmPassword) {
-	  super(); this.userName = userName; this.userPassword = userPassword;
-	  this.userConfirmPassword = userConfirmPassword; this.userFirstName =
-	  userFirstName; this.userLastName = userLastName; this.email = email;
-	  this.phone = phone; }
+	  String email,String phone, String userPassword,String userConfirmPassword, String fileName) {
+	  super();
+	  this.userName = userName; 
+	  this.userPassword = userPassword;
+	  this.userConfirmPassword = userConfirmPassword;
+	  this.userFirstName = userFirstName; 
+	  this.userLastName = userLastName; 
+	  this.email = email;
+	  this.phone = phone;
+	  this.fileName = fileName;
+	  }
 	 
 
 	public long getId() {
@@ -120,7 +131,12 @@ public class Formatter {
 		this.phone = phone;
 	} 
 	
-	
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
 
 	
 

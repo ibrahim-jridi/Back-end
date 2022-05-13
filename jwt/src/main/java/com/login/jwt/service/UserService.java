@@ -111,6 +111,20 @@ public class UserService  {
 	  				}}
 			  
 			  return userDao.save(formatter); }
+	  
+	  public User registerNewGuest(User guest) { Role role =
+			  roleDao.findById("User").get(); Set<Role> userRoles = new HashSet<>();
+			  userRoles.add(role); guest.setRole(userRoles);
+			  guest.setUserPassword(getEncodedPassword(guest.getUserPassword()));
+			  guest.setUserConfirmPassword(getEncodedPassword(guest.getUserConfirmPassword()));
+			  Iterable<User> guests = userDao.findAll();
+	  			for (User userExist : guests) {
+	  				if (guest.getUserName().equals(userExist.getUserName())) {
+	  					System.out.println("il y a un utilisateur avec ce Pseudo svp changer vos");
+	  					return null;
+	  				}}
+			  
+			  return userDao.save(guest); }
 	 
 
     public String getEncodedPassword(String password) {

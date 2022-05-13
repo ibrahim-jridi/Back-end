@@ -1,6 +1,8 @@
 package com.login.jwt.configuration;
 
 import java.util.Properties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +28,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+	
 
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -48,7 +51,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity ) throws Exception {
         httpSecurity.cors();
         httpSecurity.csrf().disable()
-                .authorizeRequests().antMatchers("/authenticate", "/registerNewUser","/registerNewFormatter","/formatterss").permitAll()
+                .authorizeRequests().antMatchers("/authenticate", "/registerNewUser","/registerNewFormatter","/formatterss","/api/students").permitAll()
                 .antMatchers(HttpHeaders.ALLOW).permitAll()
                 .and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll() 

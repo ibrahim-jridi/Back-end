@@ -1,5 +1,6 @@
 package com.login.jwt.entity;
 
+import java.io.Serializable;
 import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -22,10 +23,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
 public class Formation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +47,12 @@ public class Formation {
 	@JoinColumn(name="idFormatter")
 	private Formatter formatter;
 	
+	
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name = "guest_id")
+	@JsonIgnore
+    private Guest guest;
 	
 	
 	private String lien;
@@ -120,6 +132,17 @@ public class Formation {
 	public void setDate_final(Calendar date_final) {
 		this.date_final = date_final;
 	}
+
+	public Guest getGuest() {
+		return guest;
+	}
+
+	public void setGuest(Guest guest) {
+		this.guest = guest;
+	}
+
+	
+	
 	
 	
 }
