@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.RegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +29,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 
@@ -46,25 +49,42 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+    
+    @Bean
+    
+    public RegistrationBean jwtAuthFilterRegister(JwtRequestFilter filter) {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean(filter);
+        registrationBean.setEnabled(false);
+        return registrationBean;
+    }
 
     @Override
     protected void configure(HttpSecurity httpSecurity ) throws Exception {
         httpSecurity.cors();
         httpSecurity.csrf().disable()
-                .authorizeRequests().antMatchers("/authenticate", "/registerNewUser","/registerNewFormatter","/formatterss","/api/students").permitAll()
+                .authorizeRequests().antMatchers("/authenticate", "/registerNewUser","/registerNewFormatter","/formatterss").permitAll()
                 .antMatchers(HttpHeaders.ALLOW).permitAll()
                 .and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll() 
                 .antMatchers("/api/test/**").permitAll() // permit the class of test
                 .antMatchers("/**").permitAll() // permit all the routers after swagger-ui.html
+                .antMatchers("/formation").permitAll()
+                .antMatchers("/api/students").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         ;
+       
 
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+          .ignoring()
+            .antMatchers("/formation","/api/**");
     }
    
     @Bean

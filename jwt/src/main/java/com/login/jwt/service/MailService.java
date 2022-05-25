@@ -12,6 +12,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import com.login.jwt.entity.Formatter;
 import com.login.jwt.entity.User;
 
 
@@ -55,6 +56,26 @@ public class MailService {
 		mail.setTo(user);
 		mail.setSubject("Affecter à une formation");
 		mail.setText("Vous avez été affecté comme un formateur d'une formation");
+
+		/*
+		 * This send() contains an Object of SimpleMailMessage as an Parameter
+		 */
+		javaMailSender.send(mail);
+	}
+	
+	public void sendPass(String user, Formatter userD) throws MailException {
+
+		/*
+		 * This JavaMailSender Interface is used to send Mail in Spring Boot. This
+		 * JavaMailSender extends the MailSender Interface which contains send()
+		 * function. SimpleMailMessage Object is required because send() function uses
+		 * object of SimpleMailMessage as a Parameter
+		 */
+
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo(user);
+		mail.setSubject("userName et mot de passe");
+		mail.setText("votre userName est:"+userD.getUserName()+" "+"votre mot de passe est:"+userD.getUserPassword());
 
 		/*
 		 * This send() contains an Object of SimpleMailMessage as an Parameter

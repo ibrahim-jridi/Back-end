@@ -4,9 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 @Configuration
-public class CorsConfiguration {
+public class CorsConfiguration implements WebMvcConfigurer {
 
     private static final String GET = "GET";
     private static final String POST = "POST";
@@ -25,5 +25,9 @@ public class CorsConfiguration {
                         .allowCredentials(true);
             }
         };
+    }
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
     }
 }

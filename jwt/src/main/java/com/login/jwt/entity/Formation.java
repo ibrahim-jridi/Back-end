@@ -27,6 +27,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -38,6 +40,7 @@ public class Formation {
 	private long id;
 	private String name;
 	private String description;
+	private String prix;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="idTheme")
@@ -57,11 +60,11 @@ public class Formation {
 	
 	private String lien;
 	
-	
+	 @DateTimeFormat(pattern = "dd-MM-yyyy")
 	private ZonedDateTime date_creation = ZonedDateTime.now();
-	
+	 @DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Calendar date_debut;
-	
+	 @DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Calendar date_final;
 
 	public long getId() {
@@ -139,6 +142,14 @@ public class Formation {
 
 	public void setGuest(Guest guest) {
 		this.guest = guest;
+	}
+
+	public String getPrix() {
+		return prix;
+	}
+
+	public void setPrix(String prix) {
+		this.prix = prix;
 	}
 
 	

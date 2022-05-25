@@ -33,6 +33,7 @@ import com.login.jwt.entity.Formation;
 import com.login.jwt.entity.Formatter;
 import com.login.jwt.entity.Role;
 import com.login.jwt.entity.User;
+import com.login.jwt.service.MailService;
 import com.login.jwt.service.UserService;
 import com.login.jwt.util.ResourceNotFoundException;
 import org.apache.commons.io.FileUtils;
@@ -61,7 +62,10 @@ public class FormatterController {
 	private FormationDao formationDao;
 	@Autowired
     private PasswordEncoder passwordEncoder;
-	@Autowired  ServletContext context;
+	@Autowired
+	  private MailService  mailService;
+	@Autowired  
+	ServletContext context;
 	
 	public String getEncodedPassword(String password) {
         return passwordEncoder.encode(password);
@@ -97,7 +101,8 @@ public class FormatterController {
 					System.out.println("il y a un utilisateur avec ce Pseudo svp changer vos");
 					return null;
 				}}
-			
+			String email=formatter.getEmail();
+			mailService.sendPass(email,formatter);
 			    
 			    return formatterDao.save(formatter);
 			  }
@@ -106,6 +111,7 @@ public class FormatterController {
 	@PostMapping({"/formatters"})
 	public User registerNewFormatter(@RequestBody
 			  User formatter) { 
+		
 		return userService.registerNewFormatter(formatter);
 		
 			  }
@@ -151,11 +157,12 @@ public class FormatterController {
 	public ResponseEntity<Formatter> updateFormatter(@RequestParam("file") MultipartFile file,@PathVariable Long id, @RequestBody Formatter formatterDetails){
 		Formatter formatter = formatterDao.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("formatteur n'est pas trouvé avec ce id :" + id));
-		deletUserImage(formatter);
-		String filename = file.getOriginalFilename();
-        String newFileName = FilenameUtils.getBaseName(filename)+"."+FilenameUtils.getExtension(filename);
-        formatter.setFileName(newFileName);
-        addUserImage(file);
+		/*
+		 * deletUserImage(formatter); String filename = file.getOriginalFilename();
+		 * String newFileName =
+		 * FilenameUtils.getBaseName(filename)+"."+FilenameUtils.getExtension(filename);
+		 * formatter.setFileName(newFileName); addUserImage(file);
+		 */
 		/*
 		 * boolean isExit = new File(context.getRealPath("/Images/")).exists(); if
 		 * (!isExit) { new File (context.getRealPath("/Images/")).mkdir();
@@ -171,7 +178,7 @@ public class FormatterController {
 		 */
 		
 		formatter.setUserName(formatterDetails.getUserName());
-		formatter.setFileName(newFileName);
+		//formatter.setFileName(newFileName);
 		formatter.setUserFirstName(formatterDetails.getUserFirstName());
 		formatter.setUserLastName(formatterDetails.getUserLastName());
 		formatter.setEmail(formatterDetails.getEmail());

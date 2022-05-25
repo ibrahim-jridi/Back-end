@@ -56,37 +56,27 @@ public class FormationController {
 				return formationDao.findAll();	
 		}
 		// create formation rest api
-		@PostMapping("/formations/{idFormatter}/{idTheme}")
+		@PostMapping("/formations")
 		
-		public Formation createFormation(@RequestBody Formation formation,@RequestBody Formation formationDetails  ) {
-			/*
-			 * Theme theme = themeDao.findByName("name").get(); Set<Theme> fthemes = new
-			 * HashSet<>(); fthemes.add(theme); formation.setTheme(fthemes);
-			 */
-			//String formatterName = formation.name();
-			/* String formatterEmail = formation.email(); isSaved = true; if (isSaved == true) {
-			 *  mailService.sendEmail(formatterEmail); }
-			 */
-			//Formatter formatter = formatterDao.findById(idFormatter).get();
-			//Theme theme = themeDao.findById(idTheme).get();
-			//if (theme == null || formatter == null) {
-				//return null;
-			//} else {
-			Formatter formatter= new Formatter() ;
-			Theme theme =new Theme();
-				formation.setFormatter( formationDetails.getFormatter());
-				formatter.getFormation().add(formation);
-				formatterDao.save(formatter);
-				String email = formatter.getEmail();
+		public Formation createFormation(@RequestBody Formation formation  ) {
+			Theme theme = themeDao.findById(formation.getTheme().getId()).get();
+			Formatter formateur = formatterDao.findById(formation.getFormatter().getId()).get();
+			if (theme == null || formateur == null) return null;
+			else {
+				formation.setTheme(theme);
+				formation.setFormatter(formateur);
+				formateur.getFormation().add(formation);
+				String email = formateur.getEmail();
 				mailService.sendEmail(email);
-				
-				formation.setTheme( formationDetails.getTheme());
 				theme.getFormation().add(formation);
+				formationDao.save(formation);
+				formatterDao.save(formateur);
 				themeDao.save(theme);
-				return formationDao.save(formation);
+				return formation;
+			}
 			}
 			
-			
+		
 					 
 					
 			//}
@@ -110,7 +100,7 @@ public class FormationController {
 			formation.setDescription(formationDetails.getDescription());
 			formation.setTheme(formationDetails.getTheme());
 			formation.setLien(formationDetails.getLien());
-			
+			formation.setPrix(formationDetails.getPrix());
 			formation.setFormatter(formationDetails.getFormatter());
 			formation.setDate_creation(formationDetails.getDate_creation());
 			formation.setDate_debut(formationDetails.getDate_debut());
